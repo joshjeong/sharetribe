@@ -17,7 +17,18 @@ window.ST.paymentMath = (function() {
     return parseFloatFromFieldValue(value) * subunit_to_unit;
   }
 
-  function displayMoney(sum) {
+  function displayMoney(sum, currency, locale, inCents) {
+    if(typeof sum === "number" && !isNaN(sum)){
+      var formatter = Intl.NumberFormat(locale, {style: "currency", currency: currency})
+      var digits = formatter.resolvedOptions().minimumFractionDigits;
+      var total = digits === 0 || !inCents ? sum : sum / 100;
+
+      return formatter.format(total);
+
+    } else {
+      return "-";
+    }
+
     return typeof sum === "number" && !isNaN(sum) ? sum.toFixed(2) : "-";
   }
 
